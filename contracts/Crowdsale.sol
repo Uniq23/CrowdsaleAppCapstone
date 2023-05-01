@@ -25,6 +25,11 @@ contract Crowdsale {
             maxTokens = _maxTokens;      
 	    }
 
+	    modifier onlyOwner() {
+	    	require(msg.sender == owner, 'caller must be owner');
+	    	_;
+	    }
+
 	    receive() external payable {
 	    	uint256 amount = msg.value / price;
 	    	buyTokens(amount * 1e18);
@@ -41,7 +46,11 @@ contract Crowdsale {
 
 	    }
 
-	    function finalize() public {
+	    function setPrice(uint256 _price) public onlyOwner {
+	    	price = _price;
+	    }
+
+	    function finalize() public onlyOwner{
 	    	//send remaining tokens to crowdsale creator
 	    	require (token.transfer(owner, token.balanceOf(address(this))));
 

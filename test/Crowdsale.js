@@ -108,6 +108,18 @@ describe('Crowdsale', () => {
 
   });
 
+  describe('Update Price', () => {
+    let transaction, result;
+    let price = ether(2)
+    
+  }
+
+    describe('Success', () => {
+      beforeEach(async () => {
+        transaction = await crowdsale.connect(deployer).setPrice(ether(2));
+        result = await transaction.wait();
+      })
+
   describe('Finalizing Sale', () => {
     let transaction, result;
     const amount = tokens(10);
@@ -139,12 +151,9 @@ describe('Crowdsale', () => {
         .withArgs(amount, value)
       }  
 
-
-
     describe('Failure', () => {
-
-      it('rejects insufficient eth', async () => {
-        await expect(crowdsale.connect(user1).buyTokens(tokens(100), { value: 0})).to.be.reverted
+      it('prevents non-owner from finalizing'), async () => {
+        await expect(crowdsale.connect(user1).finalize()).to.be.reverted
       })
 
     })

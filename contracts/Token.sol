@@ -2,6 +2,7 @@
 pragma solidity ^0.8.9;
 
 import 'hardhat/console.sol';
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
 contract Token {
     string public name;
@@ -78,4 +79,21 @@ contract Token {
 
         return true;
     }
+
+    function burn(uint256 amount) //7/6/23 fininsh write tests
+        public
+        returns (bool success)
+    {
+        //Allows specified amount of tokens burned from msg.sender
+        //require(amount <= 1000000 * (10 ** decimals), "Exceeded maximum burn amount");
+        require(amount <= 1_000_000 * 10 ** decimals, "Exceeded maximum burn amount");
+     
+        balanceOf[msg.sender] -= amount;
+        totalSupply -= amount;
+     
+        emit Transfer(msg.sender, address(0), amount);
+
+        return true;
+    }
+
 }

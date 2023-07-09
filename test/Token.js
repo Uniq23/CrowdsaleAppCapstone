@@ -169,39 +169,41 @@ describe('Token', () => {
   });
 
   describe('Burning Tokens', () => {
-    let amount, transaction, result;
+  let amount, transaction, result;
+  const decimals = '18';
 
-    beforeEach(async () => {
-      amount = tokens(amount <= 1_000_000 * 10 ** decimals ? 1_000_000 : 1_000_000 * 10 ** decimals);
-      transaction = await token.connect(deployer).burn(amount);
-      result = await transaction.wait();
+  beforeEach(async () => {
+    const burnAmount = ethers.utils.parseUnits('1000000', decimals);
+    amount = burnAmount;
+    transaction = await token.connect(deployer).burn(amount);
+    result = await transaction.wait();
+  });
+
+  describe('Success', () => {
+    it('burns token balances', async () => {
+      expect(await token.balanceOf(deployer.address)).to.equal(0);
     });
 
-    describe('Success', () => {
-      it('burns token balances', async () => {
-        expect(await token.balanceOf(deployer.address)).to.be.equal(0);
-      });
+    it('emits a Burn event', async () => {
+      const event = result.events.find((ev) => ev.event === 'event');
+      expect(event).to.exist;
 
-      it('emits a Burn event', async () => {
-        const event = result.events[0];
-        expect(event.event).to.equal('Burn');
-
-        const args = event.args;
-        expect(args.from).to.equal(deployer.address);
-        expect(args.to).to.equal(ethers.constants.AddressZero);
-        expect(args.value).to.equal(amount);
-      });
-
-    });
-
-    describe('Failure', () => {
-      it('rejects invalid burn amount', async () => {
-        const invalidAmount = tokens(amount >= 1_000_000 * 10 ** decimals, 'Exceeded maximum burn amount');
-        await expect(token.connect(deployer).burn(invalidAmount)).to.be.reverted;
-      });
-
+      const args = event.args;
+      expect(args.from).to.equal(deployer.address);
+      expect(args.to).to.equal(ethers.constants.AddressZero);
+      expect(args.value).to.equal(amount);
     });
 
   });
+
+  describe('Failure', () => {
+    it('rejects invalid burn amount', async () => {
+      const invalidAmount = tokens('100000000');
+      await expect(token.connect(deployer).burn(invalidAmount)).to.be.reverted;
+    });
+
+  });
+                    //TODO update test case chatgpt and see if it can work again 7/9/23
+});
 
 });

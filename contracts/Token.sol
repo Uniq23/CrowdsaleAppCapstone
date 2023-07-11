@@ -123,6 +123,10 @@ contract Token {
 
         totalSupply += amount;
 
+        emit Transfer(address(0), msg.sender, amount);
+
+        emit Mint(msg.sender, amount);
+
         return true;
     }
 

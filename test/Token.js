@@ -105,7 +105,7 @@ describe('Token', () => {
       });
 
       it('emits an Approval event', async () => {
-        const event = result.events[0];
+        const event = result.events[0]; 
         expect(event.event).to.equal('Approval');
 
         const args = event.args;
@@ -185,13 +185,19 @@ describe('Token', () => {
     });
 
     it('emits a Burn event', async () => {
-      const event = result.events.find((ev) => ev.event === 'event');
-      expect(event).to.exist;
+      const transferEvent = result.events[0];
+      expect(transferEvent.event).to.equal('Transfer');
+      const burnEvent = result.events[1];
+      expect(burnEvent.event).to.equal('Burn');
 
-      const args = event.args;
-      expect(args.from).to.equal(deployer.address);
-      expect(args.to).to.equal(ethers.constants.AddressZero);
-      expect(args.value).to.equal(amount);
+      const transferArgs = transferEvent.args;
+      expect(transferArgs.from).to.equal(deployer.address);
+      expect(transferArgs.to).to.equal(ethers.constants.AddressZero);
+      expect(transferArgs.value).to.equal(amount);
+
+      const burnArgs = burnEvent.args;
+      expect(burnArgs.owner).to.equal(deployer.address);
+      expect(burnArgs.value).to.equal(amount);
     });
 
   });
@@ -203,7 +209,7 @@ describe('Token', () => {
     });
 
   });
-                    //TODO update test case chatgpt and see if it can work again 7/9/23
+
 });
 
 });

@@ -19,6 +19,15 @@ contract Token {
       uint256 value
     );
 
+    event Approval(address indexed owner,
+      address indexed spender,
+      uint256 value
+    );
+
+    event Burn(address indexed owner,
+      uint256 value
+    );
+
     constructor(string memory _name, 
         string memory _symbol, 
         uint256 _totalSupply) {
@@ -60,8 +69,14 @@ contract Token {
         public 
         returns (bool success)
     {
+        require(_spender != address(0));
         allowance[msg.sender][_spender] = _value;
+
+        // Emit Event
+        emit Approval(msg.sender, _spender, _value);
+
         return true;
+
     }    
 
     function transferFrom(address _from, address _to, uint256 _value) 
@@ -92,6 +107,8 @@ contract Token {
         totalSupply -= amount;
      
         emit Transfer(msg.sender, address(0), amount);
+
+        emit Burn(msg.sender, amount);
 
         return true;
     }

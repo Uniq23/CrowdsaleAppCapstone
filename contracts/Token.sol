@@ -113,4 +113,17 @@ contract Token {
         return true;
     }
 
+    function mint(uint256 amount) 
+        public 
+        returns (bool) 
+  
+    {
+        require(msg.sender == owner && msg.sender == minter);
+        _mint(msg.sender, amount);
+
+        totalSupply += amount;
+
+        return true;
+    }
+
 }

@@ -21,6 +21,7 @@ import config from '../config.json';
 function App() {
   const [provider, setProvider] = useState(null)
   const [crowdsale, setCrowdsale] = useState(null)
+  const [token, setToken] = useState(null)
 
   const [account, setAccount] = useState(null)
   const [accountBalance, setAccountBalance] = useState(0)
@@ -41,6 +42,7 @@ function App() {
 
     // Intiantiate contracts
     const token = new ethers.Contract(config[chainId].token.address, TOKEN_ABI, provider)
+    setToken(token)
     const crowdsale = new ethers.Contract(config[chainId].crowdsale.address, CROWDSALE_ABI, provider)
     setCrowdsale(crowdsale)
 
@@ -86,6 +88,8 @@ function App() {
         <>
           <p className='text-center'><strong>Current Price:</strong> {price} ETH</p>
           <Buy provider={provider} price={price} crowdsale={crowdsale} setIsLoading={setIsLoading} />
+          <MintToken provider={provider} token={token} setIsLoading={setIsLoading} />
+          <BurnToken provider={provider} token={token} setIsLoading={setIsLoading} />
           <Progress maxTokens={maxTokens} tokensSold={tokensSold} />
         </>
       )}

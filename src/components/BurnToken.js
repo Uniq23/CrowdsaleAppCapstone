@@ -8,7 +8,7 @@ import { ethers } from 'ethers'
 
 // Assume you have connected to the Token contract and obtained the contract instance
 
-const BurnToken = ({ token }) => {
+const BurnToken = ({ provider, token, setIsLoading }) => {
   const [amount, setAmount] = useState('0');
   const [isBurning, setIsBurning] = useState(false);
 
@@ -18,11 +18,13 @@ const BurnToken = ({ token }) => {
     try {
       setIsBurning(true);
 
+      const signer = await provider.getSigner()
+
       // Convert the amount to a BigNumber or uint256 type
       const amountToBurn = ethers.utils.parseUnits(amount.toString(), 'ether');
 
       // Call the burn function on the Token contract
-      const transaction = await token.burn(amountToBurn);
+      const transaction = await token.connect(signer).burn(amountToBurn);
 
       // Wait for the transaction to be confirmed
       await transaction.wait();
@@ -56,5 +58,5 @@ const BurnToken = ({ token }) => {
     </div>
   );
 };
-};
+
 export default BurnToken;

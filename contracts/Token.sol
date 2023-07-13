@@ -25,23 +25,25 @@ contract Token {
     );
 
     event Burn(address indexed owner,
-      uint256 value
+      uint256 value,
+      uint256 newTotalSupply   //added to reflect new token supply after burn
     );
 
     event Mint(address indexed owner,
       uint256 value
     );
 
+    address public owner;
+
     constructor(string memory _name, 
         string memory _symbol,
-        address public minter, 
         uint256 _totalSupply) {
 
         name = _name;
         symbol = _symbol;
         totalSupply = _totalSupply * (10**decimals);
         balanceOf[msg.sender] = totalSupply;
-        minter = msg.sender; // Assign the deployer's address as the initial minter
+        owner = msg.sender;
     }
 
     function transfer(address _to, uint256 _value) 
@@ -124,8 +126,7 @@ contract Token {
         returns (bool) 
   
     {
-        require(msg.sender == owner && msg.sender == minter);
-        Mint(msg.sender, amount);
+        require(msg.sender == owner);
 
         totalSupply += amount;
 

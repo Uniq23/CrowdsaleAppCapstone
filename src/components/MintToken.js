@@ -8,7 +8,7 @@ import { ethers } from 'ethers'
 
 // Assume you have connected to the Token contract and obtained the contract instance
 
-const MintToken = ({ token }) => {
+const MintToken = ({ provider, token, setIsLoading }) => {
   const [amount, setAmount] = useState('0');    //added the 0 value was orignally left empty
   const [isMinting, setIsMinting] = useState(false);
 
@@ -19,6 +19,7 @@ const MintToken = ({ token }) => {
       setIsMinting(true);
 
       // Check if the connected wallet address is the contract owner
+      const signer = await provider.getSigner()
       const connectedAddress = await signer.getAddress();
       const contractOwner = await token.owner();
       if (connectedAddress !== contractOwner) {
@@ -29,7 +30,7 @@ const MintToken = ({ token }) => {
       const amountToMint = ethers.utils.parseUnits(amount.toString(), 'ether');
 
       // Call the mint function on the Token contract
-      const transaction = await token.mint(amountToMint);
+      const transaction = await token.connect(signer).mint(amountToMint);
 
       // Wait for the transaction to be confirmed
       await transaction.wait();
@@ -62,7 +63,6 @@ const MintToken = ({ token }) => {
       {/* ... */}
     </div>
   );
-};
 };
 
 export default MintToken;

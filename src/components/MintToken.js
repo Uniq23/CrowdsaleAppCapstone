@@ -18,14 +18,21 @@ const MintTokensForm = ({ tokenContract }) => {
     try {
       setIsMinting(true);
 
+      // Check if the connected wallet address is the contract owner
+      const connectedAddress = await signer.getAddress();
+      const contractOwner = await tokenContract.owner();
+      if (connectedAddress !== contractOwner) {
+      throw new Error('Only the contract owner can mint tokens.');
+    }
+
       // Convert the amount to a BigNumber or uint256 type
       const amountToMint = ethers.utils.parseUnits(amount.toString(), 'ether');
 
       // Call the mint function on the Token contract
-      const tx = await tokenContract.mint(amountToMint);
+      const transaction = await tokenContract.mint(amountToMint);
 
       // Wait for the transaction to be confirmed
-      await tx.wait();
+      await transaction.wait();
 
       // Update the token balance and progress bar in your app's state
       // ...
@@ -55,6 +62,7 @@ const MintTokensForm = ({ tokenContract }) => {
       {/* ... */}
     </div>
   );
+};
 };
 
 export default MintTokensForm;

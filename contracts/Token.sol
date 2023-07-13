@@ -28,14 +28,20 @@ contract Token {
       uint256 value
     );
 
+    event Mint(address indexed owner,
+      uint256 value
+    );
+
     constructor(string memory _name, 
-        string memory _symbol, 
+        string memory _symbol,
+        address public minter, 
         uint256 _totalSupply) {
 
         name = _name;
         symbol = _symbol;
         totalSupply = _totalSupply * (10**decimals);
         balanceOf[msg.sender] = totalSupply;
+        minter = msg.sender; // Assign the deployer's address as the initial minter
     }
 
     function transfer(address _to, uint256 _value) 
@@ -119,11 +125,11 @@ contract Token {
   
     {
         require(msg.sender == owner && msg.sender == minter);
-        _mint(msg.sender, amount);
+        Mint(msg.sender, amount);
 
         totalSupply += amount;
 
-        emit Transfer(address(0), msg.sender, amount);
+        emit Transfer(msg.sender, address(0), amount);
 
         emit Mint(msg.sender, amount);
 

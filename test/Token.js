@@ -210,6 +210,51 @@ describe('Token', () => {
 
   });
 
+  describe('Mint Tokens', () => {
+  let amount, transaction, result;
+  const decimals = '18';
+
+  beforeEach(async () => {
+    amount = tokens(100);
+    transaction = await token.mint(amount, {from: owner});
+    result = await transaction.wait();
+  });
+
+  describe('Success', async () => {
+
+    it('mints tokens', async () => {
+      // SUCCESS
+      expect(await token.balanceOf(owner)).to.equal(amount);
+      expect(await token.totalSupply()).to.equal(amount);
+    });
+
+    it('emits a Mint event', async () => {
+      //const log = result.events[0];
+      const transferEvent = result.events[0];
+      expect(transferEvent.event).to.equal('Transfer');
+      const mintEvent = result.events[1];
+      expect(mintEvent.event).to.equal('Mint');
+
+      const transferArgs = transferEvent.args;
+      expect(transferArgs.from).to.equal(deployer.address);
+      expect(transferArgs.to).to.equal(ethers.constants.AddressZero);
+      expect(transferArgs.value).to.equal(amount);
+
+      const mintArgs = mintEvent.args;
+      expect(mintEvent.args.owner).to.equal(owner);
+      expect(mintEvent.args.value).to.equal(amount);
+      expect(mintEvent.args.minter).to.equal(owner);
+    });
+
+  });
+
+  describe('Failure', async () => {
+      
+    it('rejects a double mint', async () => {
+      // FAILURE: cannot mint same tokens twice
+      await token.mint(amount, { from: owner }).should.be.rejectedWith(EVM_REVERT);
+    });
+
 });
 
 });

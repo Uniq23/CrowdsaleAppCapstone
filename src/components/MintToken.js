@@ -8,7 +8,7 @@ import { ethers } from 'ethers'
 
 // Assume you have connected to the Token contract and obtained the contract instance
 
-const MintTokensForm = ({ crowdsale }) => {
+const MintToken = ({ crowdsale }) => {
   const [amount, setAmount] = useState('0');    //added the 0 value was orignally left empty
   const [isMinting, setIsMinting] = useState(false);
 
@@ -65,4 +65,4 @@ const MintTokensForm = ({ crowdsale }) => {
 };
 };
 
-export default MintTokensForm;
+export default MintToken;

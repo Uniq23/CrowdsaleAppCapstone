@@ -8,6 +8,8 @@ import Buy from './Buy';
 import Progress from './Progress';
 import Info from './Info';
 import Loading from './Loading';
+import MintToken from './MintToken';
+import BurnToken from './BurnToken';
 
 // Artifacts
 import CROWDSALE_ABI from '../abis/Crowdsale.json'

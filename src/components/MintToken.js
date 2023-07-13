@@ -8,7 +8,7 @@ import { ethers } from 'ethers'
 
 // Assume you have connected to the Token contract and obtained the contract instance
 
-const MintTokensForm = ({ tokenContract }) => {
+const MintTokensForm = ({ crowdsale }) => {
   const [amount, setAmount] = useState('0');    //added the 0 value was orignally left empty
   const [isMinting, setIsMinting] = useState(false);
 
@@ -20,7 +20,7 @@ const MintTokensForm = ({ tokenContract }) => {
 
       // Check if the connected wallet address is the contract owner
       const connectedAddress = await signer.getAddress();
-      const contractOwner = await tokenContract.owner();
+      const contractOwner = await crowdsale.owner();
       if (connectedAddress !== contractOwner) {
       throw new Error('Only the contract owner can mint tokens.');
     }
@@ -29,7 +29,7 @@ const MintTokensForm = ({ tokenContract }) => {
       const amountToMint = ethers.utils.parseUnits(amount.toString(), 'ether');
 
       // Call the mint function on the Token contract
-      const transaction = await tokenContract.mint(amountToMint);
+      const transaction = await crowdsale.mint(amountToMint);
 
       // Wait for the transaction to be confirmed
       await transaction.wait();

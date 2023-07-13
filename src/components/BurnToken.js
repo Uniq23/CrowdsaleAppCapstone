@@ -8,7 +8,7 @@ import { ethers } from 'ethers'
 
 // Assume you have connected to the Token contract and obtained the contract instance
 
-const BurnToken = ({ crowdsale }) => {
+const BurnToken = ({ token }) => {
   const [amount, setAmount] = useState('0');
   const [isBurning, setIsBurning] = useState(false);
 
@@ -22,7 +22,7 @@ const BurnToken = ({ crowdsale }) => {
       const amountToBurn = ethers.utils.parseUnits(amount.toString(), 'ether');
 
       // Call the burn function on the Token contract
-      const transaction = await crowdsale.burn(amountToBurn);
+      const transaction = await token.burn(amountToBurn);
 
       // Wait for the transaction to be confirmed
       await transaction.wait();
@@ -56,5 +56,5 @@ const BurnToken = ({ crowdsale }) => {
     </div>
   );
 };
-
+};
 export default BurnToken;

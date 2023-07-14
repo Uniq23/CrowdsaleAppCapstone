@@ -29,6 +29,7 @@ function App() {
   const [price, setPrice] = useState(0)
   const [maxTokens, setMaxTokens] = useState(0)
   const [tokensSold, setTokensSold] = useState(0)
+  const [tokensOwned, setTokensOwned] = useState(0)   //TODO NOT SURE IF IT WILL WORK
 
   const [isLoading, setIsLoading] = useState(true)
 
@@ -66,6 +67,10 @@ function App() {
     // Fetch tokens sold
     const tokensSold = ethers.utils.formatUnits(await crowdsale.tokensSold(), 18)
     setTokensSold(tokensSold)
+
+    // Fetch tokens owned    //TODO MAKE SURE THIS WORKS NOT SURE 71423
+    const tokensOwned = ethers.utils.formatUnits(await crowdsale.tokensOwned(), 18)
+    setTokensOwned(tokensOwned)
 
     setIsLoading(false)
   }

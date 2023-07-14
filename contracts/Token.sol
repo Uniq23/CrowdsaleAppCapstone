@@ -116,7 +116,7 @@ contract Token {
      
         emit Transfer(msg.sender, address(0), amount);
 
-        emit Burn(msg.sender, amount);
+        emit Burn(msg.sender, amount, totalSupply);   //total supply added to reflect new totalsupply
 
         return true;
     }

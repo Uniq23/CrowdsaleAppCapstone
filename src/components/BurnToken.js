@@ -10,13 +10,14 @@ import { ethers } from 'ethers'
 
 const BurnToken = ({ provider, token, setIsLoading }) => {
   const [amount, setAmount] = useState('0');
+  const [isWaiting, setIsWaiting] = useState(false)
   const [isBurning, setIsBurning] = useState(false);
 
   const handleBurnTokens = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
+    setIsBurning(true);
 
     try {
-      setIsBurning(true);
 
       const signer = await provider.getSigner()
 
@@ -32,31 +33,44 @@ const BurnToken = ({ provider, token, setIsLoading }) => {
       // Update the token balance and progress bar in your app's state
       // ...
 
-      setIsBurning(false);
+      //setIsBurning(false);
     } catch (error) {
       console.error('Error burning tokens:', error);
       setIsBurning(false);
     }
+
+    setIsLoading(true)
   };
 
   return (
-    <div>
-      <form onSubmit={handleBurnTokens}>
-        <input
-          type="number"
-          placeholder="Amount to burn"
-          value={amount}
-          onChange={(e) => setAmount(e.target.value)}
-        />
-        <button type="submit" disabled={isBurning}>
-          Burn Tokens
-        </button>
-      </form>
-      {isBurning && <p>Burning tokens...</p>}
-      {/* Render the progress bar component based on the token balance and total supply */}
-      {/* ... */}
-    </div>
-  );
+  <div>
+    <form onSubmit={handleBurnTokens} style={{ maxWidth: '800px', margin: '50px auto' }}>
+      <Form.Group as={Row}>
+        <Col>
+          <Form.Control
+            type="number"
+            placeholder="Amount to burn"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
+          />
+        </Col>
+        <Col className='text-center'>
+          {isWaiting ? (
+            <Spinner animation="border" />
+          ) : (
+            <Button variant="primary" type="submit" style={{ width: '100%' }}>
+              Burn Tokens
+            </Button>
+          )}
+        </Col>
+      </Form.Group>
+    </form>
+    {isBurning && <p>Burning tokens...</p>}
+    {/* Render the progress bar component based on the token balance and total supply */}
+    {/* ... */}
+  </div>
+);
+
 };
 
 export default BurnToken;

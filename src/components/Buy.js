@@ -12,7 +12,7 @@ const Buy = ({ provider, price, crowdsale, setIsLoading }) => {
 
     const buyHandler = async (e) => {
         e.preventDefault()
-        setIsWaiting(true)
+        setIsWaiting(true);
 
         try {
             const signer = await provider.getSigner()

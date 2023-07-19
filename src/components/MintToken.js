@@ -13,10 +13,11 @@ const MintToken = ({ provider, token, setIsLoading }) => {
   const [isMinting, setIsMinting] = useState(false);
 
   const handleMintTokens = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
+    setIsMinting(true);
 
     try {
-      setIsMinting(true);
+      //setIsMinting(true);
 
       // Check if the connected wallet address is the contract owner
       const signer = await provider.getSigner()

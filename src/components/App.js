@@ -69,8 +69,8 @@ function App() {
     setTokensSold(tokensSold)
 
     // Fetch tokens owned    //TODO MAKE SURE THIS WORKS NOT SURE 71423
-    const tokensOwned = ethers.utils.formatUnits(await crowdsale.tokensOwned(), 18)
-    setTokensOwned(tokensOwned)
+    // const tokensOwned = ethers.utils.formatUnits(await crowdsale.tokensOwned(), 18)
+    // setTokensOwned(tokensOwned)
 
     setIsLoading(false)
   }

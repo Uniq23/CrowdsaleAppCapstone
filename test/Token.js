@@ -18,6 +18,18 @@ describe('Token', () => {
     exchange = accounts[2];
   });
 
+  describe('Checking Token Balance after minting', () => {     //test this section of code
+    it('should return the correct token balance', async () => {
+      const accountAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+      const balance = await tokenContract.methods.checkBalance(accountAddress).call();
+      console.log("Token balance:", balance);
+      
+      // Perform assertions on the balance if needed
+      expect(balance).to.equal(expectedBalance);
+    });
+
+  });
+
   describe('Deployment', () => {
     const name = 'Dapp University';
     const symbol = 'DAPP';
@@ -220,41 +232,43 @@ describe('Token', () => {
     result = await transaction.wait();
   });
 
-  describe('Success', async () => {
+    describe('Success', async () => {
 
-    it('mints tokens', async () => {
-      // SUCCESS
-      expect(await token.balanceOf(owner)).to.equal(amount);
-      expect(await token.totalSupply()).to.equal(amount);
+      it('mints tokens', async () => {
+        // SUCCESS
+        expect(await token.balanceOf(owner)).to.equal(amount);
+        expect(await token.totalSupply()).to.equal(amount);
+      });
+
+      it('emits a Mint event', async () => {
+        //const log = result.events[0];
+        const transferEvent = result.events[0];
+        expect(transferEvent.event).to.equal('Transfer');
+        const mintEvent = result.events[1];
+        expect(mintEvent.event).to.equal('Mint');
+        console.log('amount')
+
+        const transferArgs = transferEvent.args;
+        expect(transferArgs.from).to.equal(deployer.address);
+        expect(transferArgs.to).to.equal(ethers.constants.AddressZero);
+        expect(transferArgs.value).to.equal(amount);
+
+        const mintArgs = mintEvent.args;
+        expect(mintEvent.args.owner).to.equal(owner);
+        expect(mintEvent.args.value).to.equal(amount);
+        expect(mintEvent.args.minter).to.equal(owner);
+      });
+
     });
 
-    it('emits a Mint event', async () => {
-      //const log = result.events[0];
-      const transferEvent = result.events[0];
-      expect(transferEvent.event).to.equal('Transfer');
-      const mintEvent = result.events[1];
-      expect(mintEvent.event).to.equal('Mint');
+    describe('Failure', async () => {
+        
+      it('rejects a double mint', async () => {
+        // FAILURE: cannot mint same tokens twice
+        await token.mint(amount, { from: owner }).should.be.rejectedWith(EVM_REVERT);
+      });
 
-      const transferArgs = transferEvent.args;
-      expect(transferArgs.from).to.equal(deployer.address);
-      expect(transferArgs.to).to.equal(ethers.constants.AddressZero);
-      expect(transferArgs.value).to.equal(amount);
-
-      const mintArgs = mintEvent.args;
-      expect(mintEvent.args.owner).to.equal(owner);
-      expect(mintEvent.args.value).to.equal(amount);
-      expect(mintEvent.args.minter).to.equal(owner);
     });
 
   });
 
-  describe('Failure', async () => {
-      
-    it('rejects a double mint', async () => {
-      // FAILURE: cannot mint same tokens twice
-      await token.mint(amount, { from: owner }).should.be.rejectedWith(EVM_REVERT);
-    });
-
-});
-
-});

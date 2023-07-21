@@ -10,6 +10,7 @@ import { ethers } from 'ethers'
 
 const MintToken = ({ provider, token, setIsLoading }) => {
   const [amount, setAmount] = useState('0');    //added the 0 value was orignally left empty
+  const [isWaiting, setIsWaiting] = useState(false)
   const [isMinting, setIsMinting] = useState(false);
 
   const handleMintTokens = async (e) => {
@@ -47,22 +48,31 @@ const MintToken = ({ provider, token, setIsLoading }) => {
   };
 
   return (
-    <div>
-      <form onSubmit={handleMintTokens}>
-        <input
-          type="number"
-          placeholder="Amount to mint"
-          value={amount}
-          onChange={(e) => setAmount(e.target.value)}
-        />
-        <button type="submit" disabled={isMinting}>
-          Mint Tokens
-        </button>
-      </form>
-      {isMinting && <p>Minting tokens...</p>}
-      {/* Render the progress bar component based on the token balance and total supply */}
-      {/* ... */}
-    </div>
+  <div>
+    <form onSubmit={handleMintTokens} style={{ maxWidth: '800px', margin: '50px auto' }}>
+      <Form.Group as={Row}>
+        <Col>
+          <Form.Control
+            type="number"
+            placeholder="Only Owner"
+            onChange={(e) => setAmount(e.target.value)}
+          />
+        </Col>
+        <Col className='text-center'>
+          {isWaiting ? (
+            <Spinner animation="border" />
+          ) : (
+            <Button variant="primary" type="submit" style={{ width: '100%' }}>
+              Mint Tokens
+            </Button>
+          )}
+        </Col>
+      </Form.Group>
+    </form>
+    {isMinting && <p>Minting tokens...</p>}
+    {/* Render the progress bar component based on the token balance and total supply */}
+    {/* ... */}
+  </div>
   );
 };
 

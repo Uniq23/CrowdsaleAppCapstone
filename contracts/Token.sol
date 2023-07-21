@@ -137,4 +137,14 @@ contract Token {
         return true;
     }
 
+    function checkBalance(address account) 
+        public view 
+        returns (uint256)  
+
+    {
+
+        return balanceOf[account];
+        
+    }
+
 }

@@ -30,6 +30,7 @@ function App() {
   const [maxTokens, setMaxTokens] = useState(0)
   const [tokensSold, setTokensSold] = useState(0)
   const [tokensOwned, setTokensOwned] = useState(0)   //TODO NOT SURE IF IT WILL WORK
+  const [totalSupply, setTotalSupply] = useState(0)
 
   const [isLoading, setIsLoading] = useState(true)
 
@@ -68,6 +69,8 @@ function App() {
     const tokensSold = ethers.utils.formatUnits(await crowdsale.tokensSold(), 18)
     setTokensSold(tokensSold)
 
+    const totalSupply = ethers.utils.formatUnits(await token.totalSupply(), 18)
+    setTotalSupply(totalSupply)
     // Fetch tokens owned    //TODO MAKE SURE THIS WORKS NOT SURE 71423
     // const tokensOwned = ethers.utils.formatUnits(await crowdsale.tokensOwned(), 18)
     // setTokensOwned(tokensOwned)
@@ -95,7 +98,8 @@ function App() {
           <Buy provider={provider} price={price} crowdsale={crowdsale} setIsLoading={setIsLoading} />
           <MintToken provider={provider} token={token} setIsLoading={setIsLoading} />
           <BurnToken provider={provider} token={token} setIsLoading={setIsLoading} />
-          <Progress maxTokens={maxTokens} tokensSold={tokensSold} />
+          <Progress maxTokens={maxTokens} tokensSold={tokensSold} label={'Tokens sold'} />
+          <Progress maxTokens={totalSupply} tokensSold={accountBalance} label={'Tokens Owned'} />
         </>
       )}
 

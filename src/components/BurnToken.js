@@ -50,7 +50,6 @@ const BurnToken = ({ provider, token, setIsLoading }) => {
           <Form.Control
             type="number"
             placeholder="Amount to burn"
-            value={amount}
             onChange={(e) => setAmount(e.target.value)}
           />
         </Col>

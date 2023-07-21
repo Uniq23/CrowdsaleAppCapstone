@@ -5,13 +5,16 @@ import "hardhat/console.sol";
 import "./Token.sol";
 
 contract Crowdsale {
-    address owner;
+    address public owner;
     Token public token;
     uint256 public price;
     uint256 public maxTokens;
     uint256 public tokensSold;
+    uint256 public crowdsaleDeadLine;
 
-    event Buy(uint256 amount, address buyer);
+    mapping(address => bool) public whitelist;
+
+    event Buy(uint256 amount, address buyer, uint256 bonusAmount);
     event Finalize(uint256 tokensSold, uint256 ethRaised);
 
     constructor(
@@ -30,12 +33,16 @@ contract Crowdsale {
         _;
     }
 
-    // Buy tokens directly by sending Ether
-    // --> https://docs.soliditylang.org/en/v0.8.15/contracts.html#receive-ether-function
+    modifier onlyWhitelisted() {
+        require(whitelist[msg.sender] == true, "Caller is not whitelisted");
+        _;
+    }
 
+    // Buy tokens directly by sending Ether
     receive() external payable {
         uint256 amount = msg.value / price;
         buyTokens(amount * 1e18);
+        buyTokensWhiteList(amount * 1e18);
     }
 
     function buyTokens(uint256 _amount) public payable {
@@ -45,7 +52,7 @@ contract Crowdsale {
 
         tokensSold += _amount;
 
-        emit Buy(_amount, msg.sender);
+        emit Buy(_amount, msg.sender, 0);
     }
 
     function setPrice(uint256 _price) public onlyOwner {
@@ -62,4 +69,38 @@ contract Crowdsale {
 
         emit Finalize(tokensSold, value);
     }
+
+    function addToWhitelist(address _address) public onlyOwner {
+        whitelist[_address] = true;
+    }
+
+    function removeFromWhitelist(address _address) public onlyOwner {
+        whitelist[_address] = false;
+    }
+
+    function buyTokensWhiteList(uint256 _amount) public payable onlyWhitelisted {
+        require(block.timestamp < crowdsaleDeadLine, 'Crowdsale ended');
+        require(msg.value == (_amount / 1e18) * price);
+        require(token.balanceOf(address(this)) >= _amount);
+        require(token.transfer(msg.sender, _amount));
+        require(whitelist[msg.sender]);
+
+        // Calculate and apply the early-bird bonus
+        uint256 bonusAmount = calculateBonus(_amount);
+        uint256 totalAmount = _amount + bonusAmount;
+
+        tokensSold += totalAmount;
+
+        emit Buy(totalAmount, msg.sender, bonusAmount);
+    }
+
+    // Function to calculate bonus amount based on the token amount
+    function calculateBonus(uint256 _amount) internal pure returns (uint256) {
+        require(_amount > 100, "buy at least 100 tokens receive 25% bonus");
+
+        return (_amount * 25) / 100 ;
+
+    }
+
 }
+

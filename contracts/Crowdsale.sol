@@ -16,6 +16,7 @@ contract Crowdsale {
 
     event Buy(uint256 amount, address buyer, uint256 bonusAmount);
     event Finalize(uint256 tokensSold, uint256 ethRaised);
+    event Whitelisted(address indexed _address);
 
     constructor(
         Token _token,
@@ -41,8 +42,14 @@ contract Crowdsale {
     // Buy tokens directly by sending Ether
     receive() external payable {
         uint256 amount = msg.value / price;
-        buyTokens(amount * 1e18);
-        buyTokensWhiteList(amount * 1e18);
+
+        if (whitelist[msg.sender] == true) {
+            buyTokensWhiteList(amount * 1e18);
+        }   else {
+            buyTokens(amount * 1e18);
+
+        }
+
     }
 
     function buyTokens(uint256 _amount) public payable {
@@ -71,7 +78,11 @@ contract Crowdsale {
     }
 
     function addToWhitelist(address _address) public onlyOwner {
+
+        require(whitelist[_address] == false , 'Already Whitelisted');
         whitelist[_address] = true;
+
+        emit Whitelisted(_address);
     }
 
     function removeFromWhitelist(address _address) public onlyOwner {
@@ -79,7 +90,7 @@ contract Crowdsale {
     }
 
     function buyTokensWhiteList(uint256 _amount) public payable onlyWhitelisted {
-        require(block.timestamp < crowdsaleDeadLine, 'Crowdsale ended');
+        //require(block.timestamp < crowdsaleDeadLine, 'Crowdsale ended');
         require(msg.value == (_amount / 1e18) * price);
         require(token.balanceOf(address(this)) >= _amount);
         require(token.transfer(msg.sender, _amount));

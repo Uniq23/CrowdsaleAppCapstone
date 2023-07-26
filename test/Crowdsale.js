@@ -63,7 +63,7 @@ describe('Crowdsale', () => {
       });
 
       it('emits a buy event', async () => {
-        await expect(transaction).to.emit(crowdsale, "Buy").withArgs(amount, user1.address);
+        await expect(transaction).to.emit(crowdsale, "Buy").withArgs(amount, user1.address, 0);
       });
     });
 
@@ -154,26 +154,25 @@ describe('Crowdsale', () => {
   describe('Adding to Whitelist', () => {
     let transaction, result;
 
-    before(async () => {
-      transaction = await crowdSale.connect(deployer).addToWhitelist(user1.getAddress());
+    beforeEach(async () => {
+      transaction = await crowdsale.connect(deployer).addToWhitelist(user1.address);
       result = await transaction.wait();
     });
 
     describe('Success', () => {
       it('updates whitelist', async () => {
-        expect(await crowdSale.whitelist(user1.getAddress())).to.equal(true);
+        //adds whitelisted addresses
+        expect(await crowdsale.whitelist(user1.address)).to.equal(true);
       });
 
       it('emits WhitelistUpdated event', async () => {
-        const event = result.events.find(({ event }) => event === 'WhitelistUpdated');
-        expect(event.args.user).to.equal(user1.getAddress());
-        expect(event.args.approved).to.equal(true);
+        await expect(transaction).to.emit(crowdsale, "Whitelisted").withArgs(user1.address);
       });
     });
 
     describe('Failure', () => {
       it('reverts when the user is already whitelisted', async () => {
-        await expect(crowdSale.connect(deployer).addToWhitelist(user1.getAddress())).to.be.revertedWith('Already whitelisted');
+        await expect(crowdsale.connect(deployer).addToWhitelist(user1.address)).to.be.revertedWith('Already Whitelisted');
       });
     });
   });

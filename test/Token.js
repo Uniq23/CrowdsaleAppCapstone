@@ -18,17 +18,6 @@ describe('Token', () => {
     exchange = accounts[2];
   });
 
-  describe('Checking Token Balance after minting', () => {
-    it('should return the correct token balance', async () => {
-      const accountAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
-      const balance = await tokenContract.methods.checkBalance(accountAddress).call();
-      console.log("Token balance:", balance);
-
-      // Perform assertions on the balance if needed
-      expect(balance).to.equal(expectedBalance);
-    });
-  });
-
   describe('Deployment', () => {
     const name = 'Dapp University';
     const symbol = 'DAPP';

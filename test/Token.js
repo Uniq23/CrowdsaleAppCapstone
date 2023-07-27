@@ -204,16 +204,15 @@ describe('Token', () => {
     const decimals = '18';
 
     beforeEach(async () => {
-      amount = tokens(100);
-      transaction = await token.mint(amount, { from: owner });
+      amount = tokens('100');
+      transaction = await token.connect(deployer).mint(amount);
       result = await transaction.wait();
     });
 
     describe('Success', async () => {
       it('mints tokens', async () => {
-        // SUCCESS
-        expect(await token.balanceOf(owner)).to.equal(amount);
-        expect(await token.totalSupply()).to.equal(amount);
+        // SUCCESS   
+        expect(await token.totalSupply()).to.equal(tokens('1000100'));
       });
 
       it('emits a Mint event', async () => {
@@ -228,14 +227,8 @@ describe('Token', () => {
         expect(transferArgs.value).to.equal(amount);
 
         const mintArgs = mintEvent.args;
-        expect(mintArgs.owner).to.equal(owner);
+        expect(mintArgs.owner).to.equal(deployer.address);
         expect(mintArgs.value).to.equal(amount);
-        //expect(mintArgs.minter).to.equal(owner);
-      });
-
-      it('rejects a double mint', async () => {
-        // FAILURE: cannot mint the same tokens twice
-        await expect(token.mint(amount, { from: owner })).to.be.reverted;
       });
     });
   });

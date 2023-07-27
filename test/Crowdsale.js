@@ -174,6 +174,10 @@ describe('Crowdsale', () => {
       it('reverts when the user is already whitelisted', async () => {
         await expect(crowdsale.connect(deployer).addToWhitelist(user1.address)).to.be.revertedWith('Already Whitelisted');
       });
+
+      it('requires msg.sender to be owner' , async  () => {
+        await expect(crowdsale.connect(user2).addToWhitelist(user1.address)).to.be.revertedWith('Caller is not the owner');
+      })
     });
   });
 });

@@ -32,8 +32,14 @@ async function main() {
   console.log(`Tokens transferred to Crowdsale\n`)
 
   //assigns addresses to user1 and user2 for whitelisted buy tokens
-  const [deployer, user1, user2] = await ethers.getSigners()
+  // const [deployer, user1, user2] = await ethers.getSigners()
+  // transaction = await crowdsale.connect(deployer).addToWhitelist(user1.address);
+  // await transaction.wait();
 
+  const [deployer, user1, user2] = await ethers.getSigners()
+  await crowdsale.connect(deployer).addToWhitelist(user1.address)
+  await transaction.wait();
+  
   console.log('User assigned to Whitelist')
 }
 

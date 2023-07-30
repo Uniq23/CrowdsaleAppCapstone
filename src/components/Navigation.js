@@ -1,8 +1,9 @@
 import Navbar from 'react-bootstrap/Navbar';
+import { useSelector } from 'react-redux';
 
 import logo from '../logo.png';
 
-const Navigation = () => {
+const Navigation = ({ account }) => {
   return (
     <Navbar className='my-3'>
       <img
@@ -12,7 +13,12 @@ const Navigation = () => {
         height="40"
         className="d-inline-block align-top mx-3"
       />
-      <Navbar.Brand href="#">DApp ICO Crowdsale</Navbar.Brand>
+      <Navbar.Brand href="#">POOH BEAR CROWDSALE</Navbar.Brand>
+      <Navbar.Collapse className="justify-content-end">
+        <Navbar.Text>
+          {account.slice(0, 5) + '...' + account.slice(38, 42)}
+        </Navbar.Text>
+      </Navbar.Collapse>
     </Navbar>
   );
 }

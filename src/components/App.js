@@ -86,7 +86,7 @@ function App() {
 
   return (
     <Container>
-      <Navigation />
+      <Navigation account={account} />
 
       <h1 className='my-4 text-center'>Introducing Pooh Bear Token!</h1>
 

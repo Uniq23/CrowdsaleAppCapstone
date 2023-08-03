@@ -53,6 +53,13 @@ function App() {
     const account = ethers.utils.getAddress(accounts[0])
     setAccount(account)
 
+    // Refresh account
+    window.ethereum.on('accountsChanged', async () => {
+      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+      const account = ethers.utils.getAddress(accounts[0])
+      setAccount(account)
+    })
+
     // Fetch account balance
     const accountBalance = ethers.utils.formatUnits(await token.balanceOf(account), 18)
     setAccountBalance(accountBalance)
@@ -79,9 +86,8 @@ function App() {
   }
 
   useEffect(() => {
-    if (isLoading) {
-      loadBlockchainData()
-    }
+    loadBlockchainData()
+  
   }, [isLoading])
 
   return (

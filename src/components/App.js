@@ -48,10 +48,10 @@ function App() {
     const crowdsale = new ethers.Contract(config[chainId].crowdsale.address, CROWDSALE_ABI, provider)
     setCrowdsale(crowdsale)
 
-    // Fetch account
-    const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-    const account = ethers.utils.getAddress(accounts[0])
-    setAccount(account)
+    // // Fetch account
+    // const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+    // const account = ethers.utils.getAddress(accounts[0])
+    // setAccount(account)
 
     // Refresh account
     window.ethereum.on('accountsChanged', async () => {
@@ -92,7 +92,7 @@ function App() {
 
   return (
     <Container>
-      <Navigation account={account} />
+      <Navigation account={account} setAccount={setAccount}/>
 
       <h1 className='my-4 text-center'>Introducing Pooh Bear Token!</h1>
 

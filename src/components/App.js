@@ -48,22 +48,6 @@ function App() {
     const crowdsale = new ethers.Contract(config[chainId].crowdsale.address, CROWDSALE_ABI, provider)
     setCrowdsale(crowdsale)
 
-    // // Fetch account
-    // const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-    // const account = ethers.utils.getAddress(accounts[0])
-    // setAccount(account)
-
-    // Refresh account
-    window.ethereum.on('accountsChanged', async () => {
-      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-      const account = ethers.utils.getAddress(accounts[0])
-      setAccount(account)
-    })
-
-    // Fetch account balance
-    const accountBalance = ethers.utils.formatUnits(await token.balanceOf(account), 18)
-    setAccountBalance(accountBalance)
-
     // Fetch price
     const price = ethers.utils.formatUnits(await crowdsale.price(), 18)
     setPrice(price)
@@ -78,9 +62,6 @@ function App() {
 
     const totalSupply = ethers.utils.formatUnits(await token.totalSupply(), 18)
     setTotalSupply(totalSupply)
-    // Fetch tokens owned    //TODO MAKE SURE THIS WORKS NOT SURE 71423
-    // const tokensOwned = ethers.utils.formatUnits(await crowdsale.tokensOwned(), 18)
-    // setTokensOwned(tokensOwned)
 
     setIsLoading(false)
   }
@@ -92,9 +73,10 @@ function App() {
 
   return (
     <Container>
-      <Navigation account={account} setAccount={setAccount}/>
-
       <h1 className='my-4 text-center'>Introducing Pooh Bear Token!</h1>
+      <Navigation account={account} setAccount={setAccount} accountBalance={accountBalance} setAccountBalance={setAccountBalance} token={token}/>
+
+      
 
       {isLoading ? (
         <Loading />

@@ -180,4 +180,46 @@ describe('Crowdsale', () => {
       })
     });
   });
+
+  describe('Whitelisted Buying Tokens', () => {
+  let transaction, result;
+  let amount = tokens(100);
+
+    describe('Success', () => {
+      beforeEach(async () => {
+        transaction = await crowdsale.connect(deployer).addToWhitelist(user1.address);
+        await transaction.wait();
+
+        transaction = await crowdsale.connect(user1).buyTokensWhiteList(amount, { value: ether(100) });
+        result = await transaction.wait();
+      });
+
+      it('transfers tokens', async () => {
+        // The crowdsale should transfer the purchased amount + bonus to user1
+        expect(await token.balanceOf(user1.address)).to.equal(tokens(125));
+        // The remaining balance should be the original total - the amount purchased - bonus
+        expect(await token.balanceOf(crowdsale.address)).to.equal(tokens(999875));
+      });
+
+      it('updates tokensSold', async () => {
+        expect(await crowdsale.tokensSold()).to.equal(amount);
+      });
+
+      it('emits a buy event', async () => {
+        await expect(transaction).to.emit(crowdsale, "Buy").withArgs(amount, user1.address, 0);
+      });
+    });
+
+    describe('Failure', () => {
+      it('rejects non-whitelisted users', async () => {
+        await expect(crowdsale.connect(user2).buyTokensWhiteList(tokens(10), { value: 0 })).to.be.reverted;
+      });
+
+      it('rejects insufficient ETH', async () => {
+        await expect(crowdsale.connect(user1).buyTokensWhiteList(tokens(10), { value: 0 })).to.be.reverted;
+      });
+    });
+  });
 });
+
+

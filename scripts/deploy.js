@@ -32,15 +32,21 @@ async function main() {
   console.log(`Tokens transferred to Crowdsale\n`)
 
   //assigns addresses to user1 and user2 for whitelisted buy tokens
+  const [deployer, user1, user2] = await ethers.getSigners()
+  const addToWhitelistTx = await crowdsale.connect(deployer).addToWhitelist(user1.address);
+  await addToWhitelistTx.wait();
+  console.log('User assigned to Whitelist')
+
   // const [deployer, user1, user2] = await ethers.getSigners()
-  // transaction = await crowdsale.connect(deployer).addToWhitelist(user1.address);
+  // await crowdsale.connect(deployer).addToWhitelist(user1.address)
   // await transaction.wait();
 
-  const [deployer, user1, user2] = await ethers.getSigners()
-  await crowdsale.connect(deployer).addToWhitelist(user1.address)
-  await transaction.wait();
+  //const signers = await ethers.getSigners();
+  // const [deployer, user1, user2] = await ethers.getSigners()
+  // const user1 = signers[1];
+  // await crowdsale.connect(user1).addToWhitelist(user1.address);
+  // await transaction.wait();
   
-  console.log('User assigned to Whitelist')
 }
 
 // We recommend this pattern to be able to use async/await everywhere

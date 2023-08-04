@@ -97,7 +97,15 @@ contract Crowdsale {
         require(whitelist[msg.sender]);
 
         // Calculate and apply the early-bird bonus
-        uint256 bonusAmount = calculateBonus(_amount);
+        uint256 bonusAmount = 0;  // Initialize bonusAmount to zero
+
+        // Apply bonus if the purchase amount is more than 1000 tokens
+        if (_amount > 100 * 1e18) {
+        bonusAmount = calculateBonus(_amount);
+        require(token.balanceOf(address(this)) >= bonusAmount);
+        require(token.transfer(msg.sender, bonusAmount));  // Transfer the bonus tokens
+    }
+
         uint256 totalAmount = _amount + bonusAmount;
 
         tokensSold += totalAmount;

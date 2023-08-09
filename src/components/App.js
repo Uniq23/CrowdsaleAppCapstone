@@ -25,12 +25,14 @@ function App() {
 
   const [account, setAccount] = useState(null)
   const [accountBalance, setAccountBalance] = useState(0)
+  const [isWhitelisted, setIsWhitelisted] = useState(null)
 
   const [price, setPrice] = useState(0)
   const [maxTokens, setMaxTokens] = useState(0)
   const [tokensSold, setTokensSold] = useState(0)
   const [tokensOwned, setTokensOwned] = useState(0)   //TODO NOT SURE IF IT WILL WORK
   const [totalSupply, setTotalSupply] = useState(0)
+  const [tokensMinted, setTokensMinted] = useState(0)
 
   const [isLoading, setIsLoading] = useState(true)
 
@@ -61,7 +63,7 @@ function App() {
     setTokensSold(tokensSold)
 
     const totalSupply = ethers.utils.formatUnits(await token.totalSupply(), 18)
-    setTotalSupply(totalSupply)
+    setTotalSupply(totalSupply) 
 
     setIsLoading(false)
   }
@@ -74,7 +76,7 @@ function App() {
   return (
     <Container>
       <h1 className='my-4 text-center'>Introducing Pooh Bear Token!</h1>
-      <Navigation account={account} setAccount={setAccount} accountBalance={accountBalance} setAccountBalance={setAccountBalance} token={token}/>
+      <Navigation account={account} setAccount={setAccount} accountBalance={accountBalance} setAccountBalance={setAccountBalance} token={token} setIsWhitelisted={setIsWhitelisted} crowdsale={crowdsale}/>
 
       
 
@@ -83,11 +85,11 @@ function App() {
       ) : (
         <>
           <p className='text-center'><strong>Current Price:</strong> {price} ETH</p>
-          <Buy provider={provider} price={price} crowdsale={crowdsale} setIsLoading={setIsLoading} />
+          <Buy provider={provider} price={price} crowdsale={crowdsale} setIsLoading={setIsLoading} isWhitelisted={isWhitelisted} />
           <MintToken provider={provider} token={token} setIsLoading={setIsLoading} />
           <BurnToken provider={provider} token={token} setIsLoading={setIsLoading} />
           <Progress maxTokens={maxTokens} tokensSold={tokensSold} label={'Tokens sold'} />
-          <Progress maxTokens={totalSupply} tokensSold={accountBalance} label={'Tokens Owned'} />
+          <Progress maxTokens={totalSupply} tokensSold={accountBalance} tokensSold={tokensMinted} label={'Tokens Owned / Tokens Minted'} />
         </>
       )}
 

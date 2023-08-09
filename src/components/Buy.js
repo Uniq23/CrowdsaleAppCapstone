@@ -6,7 +6,7 @@ import Spinner from 'react-bootstrap/Spinner';
 import { ethers } from 'ethers'
 import styled from 'styled-components';
 
-const Buy = ({ provider, price, crowdsale, setIsLoading }) => {
+const Buy = ({ provider, price, crowdsale, isWhitelisted, setIsLoading }) => {
     const [amount, setAmount] = useState('0')
     const [isWaiting, setIsWaiting] = useState(false)
 
@@ -26,6 +26,27 @@ const Buy = ({ provider, price, crowdsale, setIsLoading }) => {
             color: black;
         }
     `;
+
+    const buyTokensWhiteList = async (e) => {
+        e.preventDefault()
+        setIsWaiting(true);
+
+        try {
+            const signer = await provider.getSigner()
+
+            // We need to calculate the required ETH in order to buy the tokens...
+            const value = ethers.utils.parseUnits((amount * price).toString(), 'ether')
+            //const value = ethers.utils.parseUnits((((amount * price) * 25) / 100).toString(), 'ether')
+            const formattedAmount = ethers.utils.parseUnits(amount.toString(), 'ether')
+
+            const transaction = await crowdsale.connect(signer).buyTokensWhiteList(formattedAmount, { value: value })
+            await transaction.wait()
+        } catch {
+            window.alert('User rejected or transaction reverted')
+        }
+
+        setIsLoading(true)
+    }
 
     const buyHandler = async (e) => {
         e.preventDefault()
@@ -48,7 +69,7 @@ const Buy = ({ provider, price, crowdsale, setIsLoading }) => {
     }
 
     return (
-        <Form onSubmit={buyHandler} style={{ maxWidth: '800px', margin: '50px auto' }}>
+        <Form onSubmit={isWhitelisted ? buyTokensWhiteList : buyHandler} style={{ maxWidth: '800px', margin: '50px auto' }}>
             <Form.Group as={Row}>
                 <Col>
                     <Form.Control type="number" placeholder="Enter amount" onChange={(e) => setAmount(e.target.value)} />

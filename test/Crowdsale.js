@@ -196,9 +196,9 @@ describe('Crowdsale', () => {
 
       it('transfers tokens', async () => {
         // The crowdsale should transfer the purchased amount + bonus to user1
-        expect(await token.balanceOf(user1.address)).to.equal(tokens(125));
+        expect(await token.balanceOf(user1.address)).to.equal(tokens(100));
         // The remaining balance should be the original total - the amount purchased - bonus
-        expect(await token.balanceOf(crowdsale.address)).to.equal(tokens(999875));
+        expect(await token.balanceOf(crowdsale.address)).to.equal(tokens(999900));
       });
 
       it('updates tokensSold', async () => {

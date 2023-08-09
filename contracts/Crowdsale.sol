@@ -99,23 +99,23 @@ contract Crowdsale {
         // Calculate and apply the early-bird bonus
         uint256 bonusAmount = 0;  // Initialize bonusAmount to zero
 
-        // Apply bonus if the purchase amount is more than 1000 tokens
+        // Apply bonus if the purchase amount is more than 100 tokens
         if (_amount > 100 * 1e18) {
-        bonusAmount = calculateBonus(_amount);
-        require(token.balanceOf(address(this)) >= bonusAmount);
-        require(token.transfer(msg.sender, bonusAmount));  // Transfer the bonus tokens
+            bonusAmount = calculateBonus(_amount);
+            require(token.balanceOf(address(this)) >= bonusAmount);
+            require(token.transfer(msg.sender, bonusAmount));  // Transfer the bonus tokens
     }
 
         uint256 totalAmount = _amount + bonusAmount;
 
         tokensSold += totalAmount;
 
-        emit Buy(totalAmount, msg.sender, bonusAmount);
+        emit Buy(totalAmount, msg.sender, bonusAmount);    //TODO now copy abis artifacts crowdsale to other abi's then restart project
     }
 
     // Function to calculate bonus amount based on the token amount
     function calculateBonus(uint256 _amount) internal pure returns (uint256) {
-        require(_amount > 100, "buy at least 100 tokens receive 25% bonus");
+        require(_amount > 99, "buy at least 100 tokens receive 25% bonus");
 
         return (_amount * 25) / 100 ;
 

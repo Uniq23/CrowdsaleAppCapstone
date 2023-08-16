@@ -16,7 +16,7 @@ describe('Crowdsale', () => {
     const Crowdsale = await ethers.getContractFactory('Crowdsale');
     const Token = await ethers.getContractFactory('Token');
 
-    token = await Token.deploy('Dapp University', 'DAPP', '1000000');
+    token = await Token.deploy('Bitcoin 2.0', 'BC2', '1000000');
 
     accounts = await ethers.getSigners();
     deployer = accounts[0];

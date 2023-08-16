@@ -20,6 +20,17 @@ const Navigation = ({ crowdsale, account, setAccount, setIsWhitelisted, accountB
     setAccountBalance(accountBalance);
   };
 
+  const StyledConnectButton = styled(Button)`
+    background-color: teal;
+    color: white;
+    border-color: teal;
+    
+    &:hover {
+      background-color: #8B6508; gold;
+      border-color: gold;
+    }
+  `;
+
   return (
     <Navbar className='my-3'>
       <img
@@ -29,7 +40,7 @@ const Navigation = ({ crowdsale, account, setAccount, setIsWhitelisted, accountB
         height="40"
         className="d-inline-block align-top mx-3"
       />
-      <Navbar.Brand href="#">POOH BEAR CROWDSALE</Navbar.Brand>
+      <Navbar.Brand href="#">BITCOIN 2.0 CROWDSALE</Navbar.Brand>
       <Navbar.Collapse className="justify-content-end">
 
         {account ? (
@@ -37,7 +48,7 @@ const Navigation = ({ crowdsale, account, setAccount, setIsWhitelisted, accountB
             {`${account.slice(0, 6)}...${account.slice(34, 42)}`}
           </Navbar.Text>
         ) : (
-          <Button variant="primary" onClick={connectHandler}>Connect Wallet</Button>
+          <StyledConnectButton variant="primary" onClick={connectHandler}>Connect Wallet</StyledConnectButton>
         )}         
       </Navbar.Collapse>
     </Navbar>

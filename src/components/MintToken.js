@@ -5,6 +5,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Spinner from 'react-bootstrap/Spinner';
 import { ethers } from 'ethers'
+import styled from 'styled-components';
 
 // Assume you have connected to the Token contract and obtained the contract instance
 
@@ -12,6 +13,23 @@ const MintToken = ({ provider, token, setIsLoading }) => {
   const [amount, setAmount] = useState('0');    //added the 0 value was orignally left empty
   const [isWaiting, setIsWaiting] = useState(false)
   const [isMinting, setIsMinting] = useState(false);
+
+  const MintTokenButton = styled.button`
+      background-color: #B76E79; /* rose gold */
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      transition-duration: 0.4s; /* makes the change smooth */
+
+      &:hover {
+          background-color: #008080; /* teal on hover */
+          color: black;
+      }
+  `;
 
   const handleMintTokens = async (e) => {
     e.preventDefault()
@@ -62,9 +80,9 @@ const MintToken = ({ provider, token, setIsLoading }) => {
           {isWaiting ? (
             <Spinner animation="border" />
           ) : (
-            <Button variant="primary" type="submit" style={{ width: '100%' }}>
+            <MintTokenButton variant="primary" type="submit" style={{ width: '75%' }}>
               Mint Tokens
-            </Button>
+            </MintTokenButton>
           )}
         </Col>
       </Form.Group>

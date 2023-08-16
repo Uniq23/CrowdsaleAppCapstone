@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Container } from 'react-bootstrap';
-import { ethers } from 'ethers'
+import { ethers } from 'ethers';
+import styled from 'styled-components';
+import headerImage from '../images/header.png';
 
 // Components
 import Navigation from './Navigation';
@@ -68,16 +70,50 @@ function App() {
     setIsLoading(false)
   }
 
+  const HeaderImage = styled.img`    
+    display: block;
+    margin: 0 auto;
+    width: 100%;
+    max-height: 450px;
+   
+`;
+
+  const Container = styled.div`
+    width: 80%;
+    margin: 75px auto;
+    padding: 20px;
+    background-color: #f5f5f5;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  `;
+
+  const StoryTitle = styled.h1`
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    color: #333;
+  `;
+
+  const StoryParagraph = styled.p`
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 15px;
+    text-align: justify;
+  `;
+
+
   useEffect(() => {
     loadBlockchainData()
   
   }, [isLoading])
 
+  //const BitcoinStory = () => {
+
   return (
     <Container>
-      <h1 className='my-4 text-center'>Introducing Pooh Bear Token!</h1>
+      <h1 className='my-4 text-center' style={{ color: 'pink' }}>Introducing <span style={{ color: 'purple' }}>Bitcoin</span> <span style={{ color: 'rose', fontWeight: 'bold' }}>2.0</span>!</h1>
+      <HeaderImage src={headerImage} alt="Header" />
+      
       <Navigation account={account} setAccount={setAccount} accountBalance={accountBalance} setAccountBalance={setAccountBalance} token={token} setIsWhitelisted={setIsWhitelisted} crowdsale={crowdsale}/>
-
       
 
       {isLoading ? (
@@ -93,6 +129,23 @@ function App() {
         </>
       )}
 
+      <Container>
+        <StoryTitle>Bitcoin 2.0: A Phoenix Rises from the Digital Ashes</StoryTitle>
+        <StoryParagraph>In a world where Ethereum has long been the leading force in decentralized apps and smart contracts, a new challenger arose: Bitcoin 2.0.
+                        In 2025, a group of unknown developers, rumored to be led by the elusive and pseudonymous Satoshi Nakamoto, announced a major upgrade to 
+                        the original Bitcoin protocol. Termed "Bitcoin 2.0", the revamped protocol sent shockwaves throughout the crypto community. While many had 
+                        believed the narrative that Bitcoin would forever remain a 'store of value' or 'digital gold', Bitcoin 2.0 sought to change that perception of the world!</StoryParagraph>    
+            {/* ... */}
+      </Container>
+
+      <Container>
+        <StoryParagraph>The announcement came via a whitepaper, titled “Bitcoin 2.0: Reshaping the Digital Future,” published on a newly created domain. 
+                        True to the roots of the original Bitcoin whitepaper, it was concise, clear, and profound. This new protocol promised not just to
+                        be a store of value, but a complete decentralized finance (DeFi) platform that could host decentralized applications, provide instant 
+                        peer-to-peer transactions, and even offer scalability solutions that surpassed Ethereum's capabilities.</StoryParagraph>    
+            {/* ... */}
+      </Container>
+      
       <hr />
 
       {account && (

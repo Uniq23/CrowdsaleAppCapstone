@@ -24,7 +24,6 @@ const Navigation = ({ crowdsale, account, setAccount, setIsWhitelisted, accountB
     background-color: teal;
     color: white;
     border-color: teal;
-    border-radius: 10px; /*
     
     &:hover {
       background-color: #8B6508; gold;

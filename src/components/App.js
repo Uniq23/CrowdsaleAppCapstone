@@ -32,7 +32,7 @@ function App() {
   const [price, setPrice] = useState(0)
   const [maxTokens, setMaxTokens] = useState(0)
   const [tokensSold, setTokensSold] = useState(0)
-  const [tokensOwned, setTokensOwned] = useState(0)   //TODO NOT SURE IF IT WILL WORK
+  const [tokensOwned, setTokensOwned] = useState(0)   
   const [totalSupply, setTotalSupply] = useState(0)
   const [tokensMinted, setTokensMinted] = useState(0)
 
@@ -106,7 +106,6 @@ function App() {
   
   }, [isLoading])
 
-  //const BitcoinStory = () => {
 
   return (
     <Container>
